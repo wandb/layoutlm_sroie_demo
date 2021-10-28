@@ -1,6 +1,7 @@
 import torch
 import torch.optim as optim
 from tqdm import tqdm
+import wandb
 
 
 class Trainer:
@@ -27,6 +28,7 @@ class Trainer:
         self.model.to(device)
         # n_train = len(self.dataloader_train)
         losses = []
+        wandb.watch(self.model)
         for epoch in range(0, self.config["epochs"]):
             losses.append(0)
             print(f"epoch {epoch}")
@@ -52,5 +54,5 @@ class Trainer:
                 losses[epoch] += loss.data.cpu().numpy().reshape(1)[0].item()
 
             print(losses)
-            # TODO: log losses to wandb
+            wandb.log({"loss": losses[epoch]})
             # TODO: add test function and loop

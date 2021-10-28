@@ -1,9 +1,8 @@
 from pathlib import Path
 import json
 import re
-
-# from sklearn.preprocessing import LabelEncoder
 from PIL import Image
+import wandb
 
 
 def parse_line(line, regex=r"((.*?,){8})"):
@@ -63,10 +62,20 @@ def split_text_and_bbox(record: dict) -> list:
     ]
 
 
-def main():
+def main(run):
     sroie = Path.cwd().parent / "data_raw"
     task_1 = sroie / "0325updated.task1train(626p)"
     task_2 = sroie / "0325updated.task2train(626p)"
+
+    artifact_data_raw = wandb.Artifact(
+        name="data_raw",
+        type="dataset",
+    )
+    artifact_data_raw.add_dir(
+        local_path=str((Path.cwd().parent / "data_raw")),
+        name="SROIE",
+    )
+    run.log_artifact(artifact_data_raw)
 
     data = []
     label_set = {"none"}
@@ -129,6 +138,21 @@ def main():
         with filepath.open("w") as f:
             json.dump(obj=sample, fp=f)
 
+    artifact_data = wandb.Artifact(
+        name="data",
+        type="dataset",
+    )
+    artifact_data.add_dir(
+        local_path=str(Path.cwd().parent / "data"),
+        name="SROIE_LayoutLM",
+    )
+    run.log_artifact(artifact_data)
+
 
 if __name__ == "__main__":
-    main()
+    run = wandb.init(
+        project="layoutlm_sroie_demo",
+        entity="wandb-data-science",
+        job_type="preprocess",
+    )
+    main(run=run)

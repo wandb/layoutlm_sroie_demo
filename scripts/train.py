@@ -1,4 +1,5 @@
 from torch.utils.data import random_split, DataLoader
+import wandb
 from dataset import SROIE
 from transforms import GetTokenBoxesLabels
 from model import (
@@ -9,7 +10,10 @@ from trainer import Trainer
 from constants import config
 
 
-def main(config):
+def main(
+    config,
+    run,
+):
     transform_data = GetTokenBoxesLabels(
         tokenizer=tokenizer,
     )
@@ -53,4 +57,13 @@ def main(config):
 
 
 if __name__ == "__main__":
-    main(config=config)
+    run = wandb.init(
+        project="layoutlm_sroie_demo",
+        entity="wandb-data-science",
+        job_type="train",
+    )
+    wandb.config = config
+    main(
+        config=config,
+        run=run,
+    )
