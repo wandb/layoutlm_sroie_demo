@@ -9,6 +9,7 @@ torch = "*"
 pillow = "*"
 tqdm = "*"
 transformers = "*"
+wandb = "*"
 
 [dev-packages]
 
