@@ -1,12 +1,9 @@
 from pathlib import Path
 import json
 import re
-from sklearn.preprocessing import LabelEncoder
+
+# from sklearn.preprocessing import LabelEncoder
 from PIL import Image
-
-
-sroie_data_path = Path.cwd().parent / "data_raw"
-sroie_data_path.mkdir(exist_ok=True)
 
 
 def parse_line(line, regex=r"((.*?,){8})"):
@@ -66,57 +63,72 @@ def split_text_and_bbox(record: dict) -> list:
     ]
 
 
-sroie = Path.home() / "Downloads" / "SROIE2019"
-task_1 = sroie / "0325updated.task1train(626p)"
-task_2 = sroie / "0325updated.task2train(626p)"
+def main():
+    sroie = Path.cwd().parent / "data_raw"
+    task_1 = sroie / "0325updated.task1train(626p)"
+    task_2 = sroie / "0325updated.task2train(626p)"
 
-data = []
-label_set = {"none"}
+    data = []
+    label_set = {"none"}
 
-jpgs = task_1.glob("**/*.jpg")
-for jpg in jpgs:
-    if "(" not in jpg.name:
-        image = Image.open(jpg)
-        width, height = image.size
+    jpgs = task_1.glob("**/*.jpg")
+    for jpg in jpgs:
+        if "(" not in jpg.name:
+            image = Image.open(jpg)
+            width, height = image.size
 
-        ocr = parse_ocr((task_1 / f"{jpg.stem}.txt").read_text())
-        labels = json.loads((task_2 / f"{jpg.stem}.txt").read_text())
-        token_data = []
-        for key in labels.keys():
-            label_set.add(key)
+            ocr = parse_ocr((task_1 / f"{jpg.stem}.txt").read_text())
+            labels = json.loads((task_2 / f"{jpg.stem}.txt").read_text())
+            token_data = []
+            for key in labels.keys():
+                label_set.add(key)
 
-        for element in ocr:
-            tokens = split_text_and_bbox(element)
-            for token in tokens:
-                token["label_name"] = "none"
-                for label_name, label_value in labels.items():
-                    if label_value in element["text"]:
-                        token["label_name"] = label_name
+            for element in ocr:
+                tokens = split_text_and_bbox(element)
+                for token in tokens:
+                    token["label_name"] = "none"
+                    for label_name, label_value in labels.items():
+                        if label_value in element["text"]:
+                            token["label_name"] = label_name
 
-                token_data.append(token)
+                    token_data.append(token)
 
-        data.append(
-            {
-                "id": jpg.stem,
-                "image_width": width,
-                "image_height": height,
-                "data": token_data,
-            }
-        )
+            data.append(
+                {
+                    "id": jpg.stem,
+                    "image_width": width,
+                    "image_height": height,
+                    "data": token_data,
+                }
+            )
 
-label_encoder = LabelEncoder()
-label_encoder.fit(list(label_set))
+    # label_encoder = LabelEncoder()
+    # label_encoder.fit(list(label_set))
 
-for sample in data:
-    for element in sample["data"]:
-        element["label"] = label_encoder.transform(
-            [element["label_name"]],
-        )[0].item()
+    # fmt: off
+    label_encoder = {
+        label_name: label
+        for label, label_name in enumerate(label_set)
+    }
+    # fmt: on
 
-output_path = Path.cwd().parent / "data"
+    for sample in data:
+        for element in sample["data"]:
+            element["label"] = label_encoder.get(
+                element["label_name"],
+            )
+            # element["label"] = label_encoder.transform(
+            #     [element["label_name"]],
+            # )[0].item()
 
-for sample in data:
-    file_id = sample["id"]
-    filepath = output_path / f"{file_id}.json"
-    with filepath.open("w") as f:
-        json.dump(obj=sample, fp=f)
+    output_path = Path.cwd().parent / "data"
+
+    for sample in data:
+        file_id = sample["id"]
+        filepath = output_path / f"{file_id}.json"
+        with filepath.open("w") as f:
+            json.dump(obj=sample, fp=f)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,5 +1,6 @@
 data_raw/
 data/
 .vscode/
+.venv/
 
 __*
