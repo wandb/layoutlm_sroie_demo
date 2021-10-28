@@ -24,7 +24,7 @@ class GetTokenBoxesLabels:
         self.special_tokens_count = 2
         self.max_seq_length = self.tokenizer.model_max_length
 
-    def transform(
+    def __call__(
         self,
         data: dict,
     ) -> dict:
@@ -59,23 +59,10 @@ class GetTokenBoxesLabels:
                 label = elt.get("label")
                 # fmt: off
                 nrmlzd_word_box = [
-                    int(1000 * (float(elt["left"]) / image_width)),
-                    int(1000 * (float(elt["top"]) / image_height)),
-                    int(
-                        1000 * (
-                            (float(elt["left"]) + float(elt["width"]))
-                            /
-                            image_width
-                        )
-                    ),
-                    int(
-                        1000
-                        * (
-                            (float(elt["top"]) + float(elt["height"]))
-                            /
-                            image_height
-                        )
-                    ),
+                    int(1000 * (float(elt["x1"]) / image_width)),
+                    int(1000 * (float(elt["y1"]) / image_height)),
+                    int(1000 * (float(elt["x2"]) / image_width)),
+                    int(1000 * (float(elt["y2"]) / image_height)),
                 ]
                 # fmt: on
 

@@ -20,7 +20,6 @@ class Trainer:
         optimizer = optim.SGD(
             self.model.parameters(),
             lr=self.config["learning_rate"],
-            momentum=self.config["momentum"],
         )
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -54,3 +53,4 @@ class Trainer:
 
             print(losses)
             # TODO: log losses to wandb
+            # TODO: add test function and loop
