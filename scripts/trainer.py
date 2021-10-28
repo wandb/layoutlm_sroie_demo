@@ -1,5 +1,3 @@
-import json
-from pathlib import Path
 import torch
 import torch.optim as optim
 from tqdm import tqdm
@@ -52,13 +50,7 @@ class Trainer:
                 loss = outputs.loss
                 loss.backward()
                 optimizer.step()
-                # fmt: off
                 losses[epoch] += loss.data.cpu().numpy().reshape(1)[0].item()
-                # fmt: on
 
-            losses_file = Path("losses.json")
-            with losses_file.open("w") as f:
-                json.dump(
-                    obj=losses,
-                    fp=f,
-                )
+            print(losses)
+            # TODO: log losses to wandb

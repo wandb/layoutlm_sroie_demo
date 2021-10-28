@@ -1,36 +1,24 @@
 import json
 from pathlib import Path
 from torch.utils.data import Dataset
-from transformers import LayoutLMTokenizer
-from transforms import GetTokenBoxesLabels
 
 
 class SROIE(Dataset):
     def __init__(
         self,
         data_path,
-        layoutlm_config_name,
-        label_map,
+        transform,
     ):
         self.data_path = Path(data_path)
-        tokenizer = LayoutLMTokenizer.from_pretrained(
-            layoutlm_config_name,
-        )
-        self.transform = GetTokenBoxesLabels(
-            tokenizer=tokenizer,
-            label_map=label_map,
-        )
-        self.label_map = label_map
-
-        with Path("label_map.json").open("r") as f:
-            self.label_map = json.load(f)
+        self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
+        self.transform = transform
 
     def __len__(self):
-        return len(self.metadata_list)
+        return len(self.filenames_list)
 
     def __getitem__(self, idx):
-        metadata = self.metadata_list[idx]
-        local_data_path = self.data_path / f"{metadata['relpath']}"
+        filename = self.filenames_list[idx]
+        local_data_path = self.data_path / filename
         if local_data_path.is_file():
             with local_data_path.open("r") as f:
                 data = json.load(fp=f)

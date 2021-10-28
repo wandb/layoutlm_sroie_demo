@@ -1,5 +1,4 @@
 import torch
-from transformers import LayoutLMTokenizer
 
 
 class GetTokenBoxesLabels:
@@ -9,11 +8,11 @@ class GetTokenBoxesLabels:
 
     def __init__(
         self,
-        tokenizer: LayoutLMTokenizer,
-        label_map: dict,
+        tokenizer,
+        # label_map: dict,
     ) -> None:
         self.tokenizer = tokenizer
-        self.label_map = label_map
+        # self.label_map = label_map
         self.sep_token = self.tokenizer.sep_token
         self.cls_token = self.tokenizer.cls_token
         self.cls_token_box = [0, 0, 0, 0]
@@ -40,8 +39,8 @@ class GetTokenBoxesLabels:
             boudning boxes and labels associated.
         """
         total_token_length = 0
-        page_width = float(data["image_width"])
-        page_height = float(data["image_height"])
+        image_width = float(data["image_width"])
+        image_height = float(data["image_height"])
         words = []
         tokens = []
         token_boxes = []
@@ -56,16 +55,17 @@ class GetTokenBoxesLabels:
             if total_token_length < self.max_seq_length - 1:
                 words.append(word)
                 tokens.extend(word_tokens)
-                label = self.label_map.get(elt.get("label", "0"), 0)
+                # label = self.label_map.get(elt.get("label", "0"), 0)
+                label = elt.get("label")
                 # fmt: off
                 nrmlzd_word_box = [
-                    int(1000 * (float(elt["left"]) / page_width)),
-                    int(1000 * (float(elt["top"]) / page_height)),
+                    int(1000 * (float(elt["left"]) / image_width)),
+                    int(1000 * (float(elt["top"]) / image_height)),
                     int(
                         1000 * (
                             (float(elt["left"]) + float(elt["width"]))
                             /
-                            page_width
+                            image_width
                         )
                     ),
                     int(
@@ -73,7 +73,7 @@ class GetTokenBoxesLabels:
                         * (
                             (float(elt["top"]) + float(elt["height"]))
                             /
-                            page_height
+                            image_height
                         )
                     ),
                 ]
@@ -116,8 +116,8 @@ class GetTokenBoxesLabels:
         bbox = torch.tensor(token_boxes)
 
         return {
-            "image_width": page_width,
-            "image_height": page_height,
+            "image_width": image_width,
+            "image_height": image_height,
             "input_ids": input_ids,
             "attention_mask": attention_mask,
             "token_type_ids": token_type_ids,
