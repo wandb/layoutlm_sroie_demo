@@ -12,7 +12,6 @@ class SROIE(Dataset):
         layoutlm_config_name,
         label_map,
     ):
-        super(Dataset, self).__init__()
         self.data_path = Path(data_path)
         tokenizer = LayoutLMTokenizer.from_pretrained(
             layoutlm_config_name,
