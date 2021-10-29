@@ -9,8 +9,8 @@ config = {
     "learning_rate": 0.0001,
     "batch_size_train": 4,
     "batch_size_test": 1,
-    "epochs": 20,
-    "log_freq": 5,
+    "epochs": 50,
+    "log_freq": 10,
 }
 
 color_map = {
