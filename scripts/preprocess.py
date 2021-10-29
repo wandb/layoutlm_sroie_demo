@@ -111,9 +111,6 @@ def main(run):
                 }
             )
 
-    # label_encoder = LabelEncoder()
-    # label_encoder.fit(list(label_set))
-
     # fmt: off
     label_encoder = {
         label_name: label
@@ -126,9 +123,6 @@ def main(run):
             element["label"] = label_encoder.get(
                 element["label_name"],
             )
-            # element["label"] = label_encoder.transform(
-            #     [element["label_name"]],
-            # )[0].item()
 
     output_path = Path.cwd().parent / "data"
 
