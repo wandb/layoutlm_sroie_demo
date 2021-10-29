@@ -151,6 +151,7 @@ def main(run):
                 sample["image_height"],
                 sample["image_height"],
             ]
+            for sample in data
         ],
     )
     run.log({"LayoutLM on SROIE": table})
