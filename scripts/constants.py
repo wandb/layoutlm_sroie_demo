@@ -11,3 +11,10 @@ config = {
     "epochs": 4,
     "log_freq": 2,
 }
+
+color_map = {
+    0: "red",
+    1: "green",
+    2: "blue",
+    4: "orange",
+}

@@ -57,7 +57,6 @@ class Trainer:
                 labels=list(self.label_encoder.values()),
                 target_names=list(self.label_encoder.keys()),
             )
-            print(clfn_report)
             for label_name in list(self.label_encoder.keys()):
                 metrics = clfn_report[label_name]
                 wandb.log(

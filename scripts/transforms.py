@@ -99,6 +99,7 @@ class GetTokenBoxesLabels:
         bbox = torch.tensor(token_boxes)
 
         return {
+            "id": data["id"],
             "image_width": image_width,
             "image_height": image_height,
             "input_ids": input_ids,
