@@ -42,19 +42,17 @@ def main(
     )
 
     dataloader_train = DataLoader(
-        # dataset_train,
-        dataset,
-        sampler=list(range(0, 4)),
-        # shuffle=True,
+        dataset_train,
+        # sampler=list(range(0, 4)),
+        shuffle=True,
         batch_size=config["batch_size_train"],
         drop_last=False,
     )
 
     dataloader_test = DataLoader(
-        # dataset_test,
-        dataset,
-        sampler=list(range(0, 4)),
-        # shuffle=True,
+        dataset_test,
+        # sampler=list(range(0, 4)),
+        shuffle=True,
         batch_size=config["batch_size_test"],
         drop_last=False,
     )
@@ -121,12 +119,12 @@ def main(
             cv2.rectangle(
                 image_arr_bgr,
                 (
-                    image_width * (bbox[0] / 1000.0),
-                    image_height * (bbox[1] / 1000.0)
+                    int(image_width * (bbox[0] / 1000.0)),
+                    int(image_height * (bbox[1] / 1000.0)),
                 ),
                 (
-                    image_width * (bbox[2] / 1000.0),
-                    image_height * (bbox[3] / 1000.0)
+                    int(image_width * (bbox[2] / 1000.0)),
+                    int(image_height * (bbox[3] / 1000.0)),
                 ),
                 color=color,
                 thickness=3,
