@@ -7,10 +7,13 @@ class SROIE(Dataset):
     def __init__(
         self,
         data_path,
+        config,
         transform,
     ):
         self.data_path = Path.cwd().parent / "data"
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
+        if config["n_samples"] is not None:
+            self.filenames_list = self.filenames_list[: config["n_samples"]]
         self.transform = transform
 
     def __len__(self):
