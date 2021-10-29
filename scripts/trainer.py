@@ -63,18 +63,10 @@ class Trainer:
                     description="checkpoint of LayoutLM trained on SROIE",
                     type="model",
                 )
-                # fmt: off
-                model_dir = (
-                    (
-                        Path.cwd().parent /
-                        self.config["model_path"] /
-                        "state_dict.pt"
-                    )
-                )
-                # fmt: on
+                model_dir = Path.cwd().parent / self.config["model_path"]
                 torch.save(
                     self.model.state_dict(),
-                    model_dir,
+                    model_dir / "state_dict.pt",
                 )
                 model_checkpoint_artifact.add_dir(str(model_dir))
                 self.run.log_artifact(model_checkpoint_artifact)
