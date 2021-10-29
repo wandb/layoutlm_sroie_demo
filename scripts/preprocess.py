@@ -117,6 +117,11 @@ def main(run):
         for label, label_name in enumerate(label_set)
     }
     # fmt: on
+    with (Path.cwd() / "label_encoder.json").open("w") as f:
+        json.dump(
+            obj=label_encoder,
+            fp=f,
+        )
 
     for sample in data:
         for element in sample["data"]:

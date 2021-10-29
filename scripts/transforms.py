@@ -55,16 +55,13 @@ class GetTokenBoxesLabels:
             if total_token_length < self.max_seq_length - 1:
                 words.append(word)
                 tokens.extend(word_tokens)
-                # label = self.label_map.get(elt.get("label", "0"), 0)
                 label = elt.get("label")
-                # fmt: off
                 nrmlzd_word_box = [
                     int(1000 * (float(elt["x1"]) / image_width)),
                     int(1000 * (float(elt["y1"]) / image_height)),
                     int(1000 * (float(elt["x2"]) / image_width)),
                     int(1000 * (float(elt["y2"]) / image_height)),
                 ]
-                # fmt: on
 
                 token_boxes.extend([nrmlzd_word_box] * num_word_tokens)
                 token_labels.extend([label] * num_word_tokens)
