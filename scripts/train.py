@@ -14,12 +14,12 @@ def main(
     config,
     run,
 ):
-    transform_data = GetTokenBoxesLabels(
+    transform = GetTokenBoxesLabels(
         tokenizer=tokenizer,
     )
     dataset = SROIE(
         data_path=config["data_path"],
-        transform=transform_data,
+        transform=transform,
     )
     dataset_length = len(dataset)
     train_length = int(config["pct_train"] * dataset_length)
@@ -52,6 +52,7 @@ def main(
         model=model,
         dataloader_train=dataloader_train,
         dataloader_test=dataloader_test,
+        run=run,
     )
 
     trainer.train()
