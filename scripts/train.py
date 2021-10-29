@@ -30,7 +30,8 @@ def main(
     )
 
     dataloader_train = DataLoader(
-        dataset_train,
+        # dataset_train,
+        dataset,
         sampler=list(range(0, 8)),
         # shuffle=True,
         batch_size=config["batch_size_train"],
@@ -38,7 +39,8 @@ def main(
     )
 
     dataloader_test = DataLoader(
-        dataset_test,
+        # dataset_test,
+        dataset,
         sampler=list(range(0, 8)),
         # shuffle=True,
         batch_size=config["batch_size_test"],

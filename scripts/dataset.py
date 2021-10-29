@@ -9,7 +9,7 @@ class SROIE(Dataset):
         data_path,
         transform,
     ):
-        self.data_path = Path(data_path)
+        self.data_path = Path.cwd().parent / "data"
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
         self.transform = transform
 

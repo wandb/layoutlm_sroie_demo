@@ -53,6 +53,5 @@ class Trainer:
                 optimizer.step()
                 losses[epoch] += loss.data.cpu().numpy().reshape(1)[0].item()
 
-            print(losses)
             wandb.log({"loss": losses[epoch]})
             # TODO: add test function and loop

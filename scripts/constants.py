@@ -7,5 +7,5 @@ config = {
     "learning_rate": 0.0001,
     "batch_size_train": 4,
     "batch_size_test": 1,
-    "epochs": 20,
+    "epochs": 4,
 }
