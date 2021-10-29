@@ -9,15 +9,14 @@ class GetTokenBoxesLabels:
     def __init__(
         self,
         tokenizer,
-        # label_map: dict,
+        label_encoder: dict,
     ) -> None:
         self.tokenizer = tokenizer
-        # self.label_map = label_map
         self.sep_token = self.tokenizer.sep_token
         self.cls_token = self.tokenizer.cls_token
         self.cls_token_box = [0, 0, 0, 0]
         self.sep_token_box = [1000, 1000, 1000, 1000]
-        self.pad_token_label = 0
+        self.pad_token_label = label_encoder["none"]
         self.pad_token = 0
         self.pad_token_type_id = 0
         self.pad_token_box = [0, 0, 0, 0]

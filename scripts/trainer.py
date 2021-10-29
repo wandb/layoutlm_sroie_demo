@@ -1,5 +1,4 @@
 from pathlib import Path
-import json
 import torch
 import torch.optim as optim
 from tqdm import tqdm
@@ -14,12 +13,14 @@ class Trainer:
         model,
         dataloader_train,
         dataloader_test,
+        label_encoder,
         run,
     ):
         self.config = config
         self.model = model
         self.dataloader_train = dataloader_train
         self.dataloader_test = dataloader_test
+        self.label_encoder = label_encoder
         self.run = run
 
     def test(self):
@@ -41,19 +42,31 @@ class Trainer:
             )
 
             y_true = batch_labels.squeeze().detach().numpy().tolist()
-            y_pred = outputs.squeeze().detach().numpy().tolist()
-
-            with (Path.cwd() / "label_encoder.json").open("r") as f:
-                label_encoder = json.load(f)
+            # fmt: off
+            y_pred = (
+                torch.argmax(outputs.logits.squeeze().detach(), dim=1)
+                .numpy()
+                .tolist()
+            )
+            # fmt: on
 
             clfn_report = classification_report(
                 y_true=y_true,
                 y_pred=y_pred,
                 output_dict=True,
-                labels=list(label_encoder.values()),
-                target_names=list(label_encoder.keys()),
+                labels=list(self.label_encoder.values()),
+                target_names=list(self.label_encoder.keys()),
             )
             print(clfn_report)
+            for label_name in list(self.label_encoder.keys()):
+                metrics = clfn_report[label_name]
+                wandb.log(
+                    {
+                        f"{label_name}/precision": metrics["precision"],
+                        f"{label_name}/recall": metrics["recall"],
+                        f"{label_name}/f1-score": metrics["f1-score"],
+                    }
+                )
 
     def train(self):
         optimizer = optim.SGD(

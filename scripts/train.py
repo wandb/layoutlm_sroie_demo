@@ -1,3 +1,5 @@
+from pathlib import Path
+import json
 from torch.utils.data import random_split, DataLoader
 import wandb
 from dataset import SROIE
@@ -14,8 +16,12 @@ def main(
     config,
     run,
 ):
+    with (Path.cwd() / "label_encoder.json").open("r") as f:
+        label_encoder = json.load(f)
+
     transform = GetTokenBoxesLabels(
         tokenizer=tokenizer,
+        label_encoder=label_encoder,
     )
     dataset = SROIE(
         data_path=config["data_path"],
@@ -52,6 +58,7 @@ def main(
         model=model,
         dataloader_train=dataloader_train,
         dataloader_test=dataloader_test,
+        label_encoder=label_encoder,
         run=run,
     )
 
