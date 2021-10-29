@@ -22,39 +22,38 @@ class Trainer:
         self.dataloader_test = dataloader_test
         self.run = run
 
+    def test(self):
+        device = "cuda" if torch.cuda.is_available() else "cpu"
 
-def test(self):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+        for batch in tqdm(self.dataloader_test):
+            batch_input_ids = batch["input_ids"].to(device)
+            batch_attention_mask = batch["attention_mask"].to(device)
+            batch_token_type_ids = batch["token_type_ids"].to(device)
+            batch_bbox = batch["bbox"].to(device)
+            batch_labels = batch["labels"].to(device)
 
-    for batch in tqdm(self.dataloader_test):
-        batch_input_ids = batch["input_ids"].to(device)
-        batch_attention_mask = batch["attention_mask"].to(device)
-        batch_token_type_ids = batch["token_type_ids"].to(device)
-        batch_bbox = batch["bbox"].to(device)
-        batch_labels = batch["labels"].to(device)
+            outputs = self.model(
+                input_ids=batch_input_ids,
+                bbox=batch_bbox,
+                attention_mask=batch_attention_mask,
+                token_type_ids=batch_token_type_ids,
+                labels=batch_labels,
+            )
 
-        outputs = self.model(
-            input_ids=batch_input_ids,
-            bbox=batch_bbox,
-            attention_mask=batch_attention_mask,
-            token_type_ids=batch_token_type_ids,
-            labels=batch_labels,
-        )
+            y_true = batch_labels.squeeze().detach().numpy().tolist()
+            y_pred = outputs.squeeze().detach().numpy().tolist()
 
-        y_true = batch_labels.squeeze().detach().numpy().tolist()
-        y_pred = outputs.squeeze().detach().numpy().tolist()
+            with (Path.cwd() / "label_encoder.json").open("r") as f:
+                label_encoder = json.load(f)
 
-        with (Path.cwd() / "label_encoder.json").open("r") as f:
-            label_encoder = json.load(f)
-
-        clfn_report = classification_report(
-            y_true=y_true,
-            y_pred=y_pred,
-            output_dict=True,
-            labels=list(label_encoder.values()),
-            target_names=list(label_encoder.keys()),
-        )
-        print(clfn_report)
+            clfn_report = classification_report(
+                y_true=y_true,
+                y_pred=y_pred,
+                output_dict=True,
+                labels=list(label_encoder.values()),
+                target_names=list(label_encoder.keys()),
+            )
+            print(clfn_report)
 
     def train(self):
         optimizer = optim.SGD(
@@ -106,5 +105,3 @@ def test(self):
                 )
                 model_checkpoint_artifact.add_dir(str(model_dir))
                 self.run.log_artifact(model_checkpoint_artifact)
-
-            # TODO: add test function and loop
