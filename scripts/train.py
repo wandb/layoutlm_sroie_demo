@@ -31,15 +31,16 @@ def main(
 
     dataloader_train = DataLoader(
         dataset_train,
-        # sampler=list(range(0, 8)),
-        shuffle=True,
+        sampler=list(range(0, 8)),
+        # shuffle=True,
         batch_size=config["batch_size_train"],
         drop_last=False,
     )
 
     dataloader_test = DataLoader(
         dataset_test,
-        shuffle=True,
+        sampler=list(range(0, 8)),
+        # shuffle=True,
         batch_size=config["batch_size_test"],
         drop_last=False,
     )
