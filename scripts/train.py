@@ -57,8 +57,6 @@ def main(
 
     trainer.train()
 
-    # TODO: log model to wandb
-
 
 if __name__ == "__main__":
     run = wandb.init(

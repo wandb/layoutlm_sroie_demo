@@ -29,7 +29,6 @@ class Trainer:
 
         self.model.train()
         self.model.to(device)
-        # n_train = len(self.dataloader_train)
         losses = []
         for epoch in range(0, self.config["epochs"]):
             losses.append(0)
