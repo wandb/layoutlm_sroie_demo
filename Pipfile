@@ -10,6 +10,8 @@ pillow = "*"
 tqdm = "*"
 transformers = "*"
 wandb = "*"
+scikit-learn = "*"
+opencv-python = "*"
 
 [dev-packages]
 
