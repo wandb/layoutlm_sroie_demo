@@ -10,7 +10,7 @@ class SROIE(Dataset):
         config,
         transform,
     ):
-        self.data_path = Path.cwd().parent / "data"
+        self.data_path = Path.cwd() / "data"
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
         if config["n_samples"] is not None:
             self.filenames_list = self.filenames_list[: config["n_samples"]]

@@ -3,7 +3,7 @@ from transformers import (
     LayoutLMConfig,
     LayoutLMForTokenClassification,
 )
-from constants import config
+from objects.constants import config
 
 
 tokenizer = LayoutLMTokenizer.from_pretrained(

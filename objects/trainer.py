@@ -110,7 +110,7 @@ class Trainer:
                     description="checkpoint of LayoutLM trained on SROIE",
                     type="model",
                 )
-                model_dir = Path.cwd().parent / self.config["model_path"]
+                model_dir = Path.cwd() / self.config["model_path"]
                 torch.save(
                     self.model.state_dict(),
                     model_dir / "state_dict.pt",

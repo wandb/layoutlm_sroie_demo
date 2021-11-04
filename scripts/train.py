@@ -7,21 +7,21 @@ import wandb
 from tqdm import tqdm
 import cv2
 from PIL import Image
-from dataset import SROIE
-from transforms import GetTokenBoxesLabels
-from model import (
+from objects.dataset import SROIE
+from scripts.transforms import GetTokenBoxesLabels
+from objects.model import (
     tokenizer,
     model,
 )
-from trainer import Trainer
-from constants import config, color_map, task_1_dir
+from objects.trainer import Trainer
+from objects.constants import config, color_map, task_1_dir
 
 
 def main(
     config,
     run,
 ):
-    with (Path.cwd() / "label_encoder.json").open("r") as f:
+    with (Path.cwd() / "scripts" / "label_encoder.json").open("r") as f:
         label_encoder = json.load(f)
 
     transform = GetTokenBoxesLabels(
@@ -103,7 +103,7 @@ def main(
         image_height = batch["image_height"]
         # fmt: off
         image = Image.open(
-            Path.cwd().parent
+            Path.cwd()
             / "data_raw"
             / task_1_dir
             / f"{batch['id'][0]}.jpg"
