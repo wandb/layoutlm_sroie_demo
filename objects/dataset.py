@@ -6,11 +6,20 @@ from torch.utils.data import Dataset
 class SROIE(Dataset):
     def __init__(
         self,
+        run,
         data_path,
         config,
         transform,
     ):
-        self.data_path = Path.cwd() / "data"
+        self.data_path = Path.cwd() / data_path
+        self.data_path.mkdir(exist_ok=True)
+        artifact = run.use_artifact(
+            f"{run.project}/{str(Path.cwd())}/{data_path}:latest",
+            type="dataset",
+        )
+        artifact.download(
+            root=str(self.data_path),
+        )
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
         if config["n_samples"] is not None:
             self.filenames_list = self.filenames_list[: config["n_samples"]]

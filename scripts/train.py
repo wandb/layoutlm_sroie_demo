@@ -29,6 +29,7 @@ def main(
         label_encoder=label_encoder,
     )
     dataset = SROIE(
+        run=run,
         data_path=config["data_path"],
         config=config,
         transform=transform,
