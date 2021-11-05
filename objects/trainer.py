@@ -23,7 +23,7 @@ class Trainer:
         self.label_encoder = label_encoder
         self.run = run
 
-    def test(self):
+    def test(self, epoch):
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
         for batch in tqdm(self.dataloader_test):
@@ -59,12 +59,13 @@ class Trainer:
             )
             for label_name in list(self.label_encoder.keys()):
                 metrics = clfn_report[label_name]
-                wandb.log(
+                self.run.log(
                     {
                         f"{label_name}/precision": metrics["precision"],
                         f"{label_name}/recall": metrics["recall"],
                         f"{label_name}/f1-score": metrics["f1-score"],
-                    }
+                    },
+                    step=epoch,
                 )
 
     def train(self):
@@ -101,10 +102,13 @@ class Trainer:
                 optimizer.step()
                 losses[epoch] += loss.data.cpu().numpy().reshape(1)[0].item()
 
-            wandb.log({"loss": losses[epoch]})
+            self.run.log(
+                {"loss": losses[epoch]},
+                step=epoch,
+            )
 
             if (epoch + 1) % self.config["log_freq"] == 0:
-                self.test()
+                self.test(epoch=epoch)
                 model_checkpoint_artifact = wandb.Artifact(
                     name="LayoutLM",
                     description="checkpoint of LayoutLM trained on SROIE",
