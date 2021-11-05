@@ -14,7 +14,7 @@ class SROIE(Dataset):
         self.data_path = Path.cwd() / data_path
         self.data_path.mkdir(exist_ok=True)
         artifact = run.use_artifact(
-            f"{run.project}/{str(Path.cwd())}/{data_path}:latest",
+            f"{run.entity}/{run.project}/{data_path}:latest",
             type="dataset",
         )
         artifact.download(
