@@ -20,7 +20,7 @@ class SROIE(Dataset):
             type="dataset",
         )
         artifact.download(
-            root=str(self.data_path),
+            root=str(Path.cwd()),
         )
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
         if config["n_samples"] is not None:
