@@ -63,7 +63,7 @@ def split_text_and_bbox(record: dict) -> list:
 
 
 def main(run):
-    sroie = Path.cwd().parent / "data_raw"
+    sroie = Path.cwd() / "data_raw"
     task_1 = sroie / "0325updated.task1train(626p)"
     task_2 = sroie / "0325updated.task2train(626p)"
 
@@ -72,7 +72,7 @@ def main(run):
         type="dataset",
     )
     artifact_data_raw.add_dir(
-        local_path=str((Path.cwd().parent / "data_raw")),
+        local_path=str((Path.cwd() / "data_raw")),
         name="SROIE",
     )
     run.log_artifact(artifact_data_raw)
@@ -117,7 +117,7 @@ def main(run):
         for label, label_name in enumerate(label_set)
     }
     # fmt: on
-    with (Path.cwd() / "label_encoder.json").open("w") as f:
+    with (Path.cwd() / "scripts" / "label_encoder.json").open("w") as f:
         json.dump(
             obj=label_encoder,
             fp=f,
@@ -129,7 +129,7 @@ def main(run):
                 element["label_name"],
             )
 
-    output_path = Path.cwd().parent / "data"
+    output_path = Path.cwd() / "data"
 
     for sample in data:
         file_id = sample["id"]
@@ -142,7 +142,7 @@ def main(run):
         type="dataset",
     )
     artifact_data.add_dir(
-        local_path=str(Path.cwd().parent / "data"),
+        local_path=str(Path.cwd() / "data"),
         name="data",
     )
     run.log_artifact(artifact_data)
