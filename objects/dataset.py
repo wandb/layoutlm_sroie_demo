@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import shutil
 from torch.utils.data import Dataset
 
 
@@ -12,6 +13,7 @@ class SROIE(Dataset):
         transform,
     ):
         self.data_path = Path.cwd() / data_path
+        shutil.rmtree(self.data_path)
         self.data_path.mkdir(exist_ok=True)
         artifact = run.use_artifact(
             f"{run.entity}/{run.project}/{data_path}:latest",
