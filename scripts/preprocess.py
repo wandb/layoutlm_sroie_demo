@@ -143,7 +143,7 @@ def main(run):
     )
     artifact_data.add_dir(
         local_path=str(Path.cwd().parent / "data"),
-        name="SROIE_LayoutLM",
+        name="data",
     )
     run.log_artifact(artifact_data)
 
