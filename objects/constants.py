@@ -2,15 +2,15 @@ config = {
     "tokenizer_name": "microsoft/layoutlm-base-uncased",
     "model_name": "microsoft/layoutlm-base-uncased",
     "data_path": "data",
-    "n_samples": 160,  # None for full dataset
+    "n_samples": 40,  # None for full dataset
     "model_path": "model",
     "num_labels": 5,
     "pct_train": 0.8,
     "learning_rate": 0.0001,
     "batch_size_train": 4,
     "batch_size_test": 1,
-    "epochs": 50,
-    "log_freq": 10,
+    "epochs": 20,
+    "log_freq": 2,
 }
 
 color_map = {
