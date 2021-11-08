@@ -13,7 +13,7 @@ class SROIE(Dataset):
         transform,
     ):
         self.data_path = Path.cwd() / data_path
-        if data_path.exists() and data_path.is_dir():
+        if self.data_path.exists() and self.data_path.is_dir():
             shutil.rmtree(self.data_path)
         self.data_path.mkdir(exist_ok=True)
         artifact = run.use_artifact(
