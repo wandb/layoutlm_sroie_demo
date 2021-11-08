@@ -45,6 +45,7 @@ class Trainer:
             # fmt: off
             y_pred = (
                 torch.argmax(outputs.logits.squeeze().detach(), dim=1)
+                .cpu()
                 .numpy()
                 .tolist()
             )
