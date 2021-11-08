@@ -97,7 +97,7 @@ def main(run):
                 for token in tokens:
                     token["label_name"] = "none"
                     for label_name, label_value in labels.items():
-                        if label_value in element["text"]:
+                        if element["text"] in label_value:
                             token["label_name"] = label_name
 
                     token_data.append(token)
