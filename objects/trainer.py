@@ -41,7 +41,7 @@ class Trainer:
                 labels=batch_labels,
             )
 
-            y_true = batch_labels.squeeze().detach().numpy().tolist()
+            y_true = batch_labels.squeeze().detach().cpu().numpy().tolist()
             # fmt: off
             y_pred = (
                 torch.argmax(outputs.logits.squeeze().detach(), dim=1)
