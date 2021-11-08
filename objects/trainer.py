@@ -115,6 +115,7 @@ class Trainer:
                     type="model",
                 )
                 model_dir = Path.cwd() / self.config["model_path"]
+                model_dir.mkdir(exist_ok=True)
                 torch.save(
                     self.model.state_dict(),
                     model_dir / "state_dict.pt",
