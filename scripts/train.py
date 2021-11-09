@@ -9,7 +9,7 @@ import cv2
 from PIL import Image
 import cloudpickle
 from objects.dataset import SROIE
-from scripts.transforms import GetTokenBoxesLabels
+from objects.transforms import GetTokenBoxesLabels
 from objects.model import (
     tokenizer,
     model,
