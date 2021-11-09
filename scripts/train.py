@@ -112,7 +112,11 @@ def main(
 
         bbox_list = batch_bbox.squeeze().detach().numpy().tolist()
         selected_boxes = [
-            {"bbox": bbox_list[index], "pred": pred, "color": color_map[pred]}
+            {
+                "bbox": bbox_list[index],
+                "pred": pred,
+                "color": color_map[label_encoder[pred]],
+            }
             for index, pred in enumerate(
                 [y for y in y_pred if y != label_encoder["none"]]
             )
