@@ -12,6 +12,7 @@ transformers = "*"
 wandb = "*"
 scikit-learn = "*"
 opencv-python = "*"
+cloudpickle = "*"
 
 [dev-packages]
 

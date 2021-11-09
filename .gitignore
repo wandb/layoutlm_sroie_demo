@@ -1,6 +1,7 @@
 data_raw/
 data/
 model/
+transform/
 .vscode/
 .venv/
 wandb/
