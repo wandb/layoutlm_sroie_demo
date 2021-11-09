@@ -97,7 +97,7 @@ def main(run):
                 for token in tokens:
                     token["label_name"] = "none"
                     for label_name, label_value in labels.items():
-                        if element["text"] in label_value:
+                        if token["text"] in label_value:
                             token["label_name"] = label_name
 
                     token_data.append(token)
@@ -147,19 +147,19 @@ def main(run):
     )
     run.log_artifact(artifact_data)
 
-    table = wandb.Table(
-        columns=["id", "image", "height", "width"],
-        data=[
-            [
-                sample["id"],
-                wandb.Image(str(task_1 / f"{sample['id']}.jpg")),
-                sample["image_height"],
-                sample["image_height"],
-            ]
-            for sample in data
-        ],
-    )
-    run.log({"LayoutLM on SROIE": table})
+    # table = wandb.Table(
+    #     columns=["id", "image", "height", "width"],
+    #     data=[
+    #         [
+    #             sample["id"],
+    #             wandb.Image(str(task_1 / f"{sample['id']}.jpg")),
+    #             sample["image_height"],
+    #             sample["image_height"],
+    #         ]
+    #         for sample in data
+    #     ],
+    # )
+    # run.log({"LayoutLM on SROIE": table})
 
 
 if __name__ == "__main__":
