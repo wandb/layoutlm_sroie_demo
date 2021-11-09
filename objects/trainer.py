@@ -26,6 +26,8 @@ class Trainer:
     def test(self, epoch):
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
+        y_true = []
+        y_pred = []
         for batch in tqdm(self.dataloader_test):
             batch_input_ids = batch["input_ids"].to(device)
             batch_attention_mask = batch["attention_mask"].to(device)
@@ -41,9 +43,16 @@ class Trainer:
                 labels=batch_labels,
             )
 
-            y_true = batch_labels.squeeze().detach().cpu().numpy().tolist()
             # fmt: off
-            y_pred = (
+            y_true_batch = (
+                batch_labels
+                .squeeze()
+                .detach()
+                .cpu()
+                .numpy()
+                .tolist()
+            )
+            y_pred_batch = (
                 torch.argmax(outputs.logits.squeeze().detach(), dim=1)
                 .cpu()
                 .numpy()
@@ -51,23 +60,26 @@ class Trainer:
             )
             # fmt: on
 
-            clfn_report = classification_report(
-                y_true=y_true,
-                y_pred=y_pred,
-                output_dict=True,
-                labels=list(self.label_encoder.values()),
-                target_names=list(self.label_encoder.keys()),
+            y_true.extend(y_true_batch)
+            y_pred.extend(y_pred_batch)
+
+        clfn_report = classification_report(
+            y_true=y_true,
+            y_pred=y_pred,
+            output_dict=True,
+            labels=list(self.label_encoder.values()),
+            target_names=list(self.label_encoder.keys()),
+        )
+        for label_name in list(self.label_encoder.keys()):
+            metrics = clfn_report[label_name]
+            self.run.log(
+                {
+                    f"{label_name}/precision": metrics["precision"],
+                    f"{label_name}/recall": metrics["recall"],
+                    f"{label_name}/f1-score": metrics["f1-score"],
+                },
+                step=epoch,
             )
-            for label_name in list(self.label_encoder.keys()):
-                metrics = clfn_report[label_name]
-                self.run.log(
-                    {
-                        f"{label_name}/precision": metrics["precision"],
-                        f"{label_name}/recall": metrics["recall"],
-                        f"{label_name}/f1-score": metrics["f1-score"],
-                    },
-                    step=epoch,
-                )
 
     def train(self):
         optimizer = optim.SGD(
