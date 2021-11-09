@@ -110,6 +110,22 @@ class Trainer:
 
             if (epoch + 1) % self.config["log_freq"] == 0:
                 self.test(epoch=epoch)
+                # model_checkpoint_artifact = wandb.Artifact(
+                #     name="LayoutLM",
+                #     description="checkpoint of LayoutLM trained on SROIE",
+                #     type="model",
+                # )
+                model_dir = Path.cwd() / self.config["model_path"]
+                model_dir.mkdir(exist_ok=True)
+                torch.save(
+                    self.model.state_dict(),
+                    model_dir / "state_dict.pt",
+                )
+                # model_checkpoint_artifact.add_dir(str(model_dir))
+                # self.run.log_artifact(model_checkpoint_artifact)
+
+            if (epoch + 1) == self.config["epochs"]:
+                self.test(epoch=epoch)
                 model_checkpoint_artifact = wandb.Artifact(
                     name="LayoutLM",
                     description="checkpoint of LayoutLM trained on SROIE",
