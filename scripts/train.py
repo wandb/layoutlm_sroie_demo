@@ -88,6 +88,16 @@ def main(
 
     label_encoder_inv = {value: key for key, value in label_encoder.items()}
 
+    sroie = Path.cwd() / "data_raw"
+    sroie.mkdir(exist_ok=True)
+    artifact_data_raw = run.use_artifact(
+        f"{run.entity}/{run.project}/data_raw:latest",
+        type="dataset",
+    )
+    artifact_data_raw.download(
+        root=str(Path.cwd()),
+    )
+
     annotated_images = []
     for batch in tqdm(dataloader_test, "final"):
         batch_input_ids = batch["input_ids"]
