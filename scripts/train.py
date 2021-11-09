@@ -86,6 +86,8 @@ def main(
 
     trainer.train()
 
+    label_encoder_inv = {value: key for key, value in label_encoder.items()}
+
     annotated_images = []
     for batch in tqdm(dataloader_test, "final"):
         batch_input_ids = batch["input_ids"]
@@ -115,7 +117,7 @@ def main(
             {
                 "bbox": bbox_list[index],
                 "pred": pred,
-                "color": color_map[label_encoder[pred]],
+                "color": color_map[label_encoder_inv[pred]],
             }
             for index, pred in enumerate(
                 [y for y in y_pred if y != label_encoder["none"]]
