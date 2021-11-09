@@ -7,7 +7,7 @@ config = {
     "num_labels": 5,
     "pct_train": 0.8,
     "learning_rate": 0.001,
-    "batch_size_train": 4,
+    "batch_size_train": 8,
     "batch_size_test": 1,
     "epochs": 50,
     "log_freq": 5,
