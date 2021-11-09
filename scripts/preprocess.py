@@ -3,6 +3,7 @@ import json
 import re
 from PIL import Image
 import wandb
+from objects.constants import config
 
 
 def parse_line(line, regex=r"((.*?,){8})"):
@@ -72,7 +73,7 @@ def main(run):
         type="dataset",
     )
     artifact_data_raw.add_dir(
-        local_path=str((Path.cwd() / "data_raw")),
+        local_path=str((Path.cwd() / config["data_raw_path"])),
         name="SROIE",
     )
     run.log_artifact(artifact_data_raw)

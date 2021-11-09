@@ -61,7 +61,6 @@ def main(
 
     dataloader_train = DataLoader(
         dataset_train,
-        # sampler=list(range(0, 4)),
         shuffle=True,
         batch_size=config["batch_size_train"],
         drop_last=False,
@@ -69,7 +68,6 @@ def main(
 
     dataloader_test = DataLoader(
         dataset_test,
-        # sampler=list(range(0, 4)),
         shuffle=True,
         batch_size=config["batch_size_test"],
         drop_last=False,
@@ -88,7 +86,7 @@ def main(
 
     label_encoder_inv = {value: key for key, value in label_encoder.items()}
 
-    sroie = Path.cwd() / "data_raw"
+    sroie = Path.cwd() / config["data_raw_path"]
     sroie.mkdir(exist_ok=True)
     artifact_data_raw = run.use_artifact(
         f"{run.entity}/{run.project}/data_raw:latest",
@@ -138,7 +136,7 @@ def main(
         # fmt: off
         image = Image.open(
             Path.cwd()
-            / "data_raw"
+            / config["data_raw_path"]
             / task_1_dir
             / f"{batch['id'][0]}.jpg"
         )
