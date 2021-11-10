@@ -8,3 +8,4 @@ transforms/
 wandb/
 scripts/wandb/
 __*
+.nohup
