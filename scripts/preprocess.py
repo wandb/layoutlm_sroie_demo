@@ -64,7 +64,7 @@ def split_text_and_bbox(record: dict) -> list:
 
 
 def main(run):
-    sroie = Path.cwd() / "data_raw"
+    sroie = Path.cwd() / config["data_raw_path"]
     task_1 = sroie / "0325updated.task1train(626p)"
     task_2 = sroie / "0325updated.task2train(626p)"
 
