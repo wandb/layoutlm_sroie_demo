@@ -127,9 +127,14 @@ def main(
                 "pred": pred,
                 "color": color_map[label_encoder_inv[pred]],
             }
-            for index, pred in enumerate(
-                [y for y in y_pred if y != label_encoder["none"]]
-            )
+            for index, pred in [
+                (i, y_pred[i])
+                for i in range(len(y_pred))
+                if y_pred[i] != label_encoder["none"]
+            ]
+            # enumerate(
+            #     [y for y in y_pred if y != label_encoder["none"]]
+            # )
         ]
         image_width = batch["image_width"]
         image_height = batch["image_height"]
