@@ -10,7 +10,7 @@ config = {
     "learning_rate": 0.001,
     "batch_size_train": 16,
     "batch_size_test": 1,
-    "epochs": 2,
+    "epochs": 1,
     "log_freq": 1,
 }
 
