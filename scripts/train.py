@@ -1,11 +1,13 @@
 from pathlib import Path
 import json
-import numpy as np
+
+# import numpy as np
 import torch
 from torch.utils.data import random_split, DataLoader
 import wandb
 from tqdm import tqdm
-import cv2
+
+# import cv2
 from PIL import Image
 import cloudpickle
 from objects.dataset import SROIE
@@ -146,35 +148,72 @@ def main(
             / f"{batch['id'][0]}.jpg"
         )
         # fmt: on
-        image_arr = np.asarray(image)
-        # convert rgb array to opencv's bgr format
-        image_arr_bgr = cv2.cvtColor(image_arr, cv2.COLOR_RGB2BGR)
-        for box in selected_boxes:
-            bbox = box["bbox"]
-            color = box["color"]
-            # fmt: off
-            cv2.rectangle(
-                image_arr_bgr,
-                (
-                    int(image_width * (bbox[0] / 1000.0)),
-                    int(image_height * (bbox[1] / 1000.0)),
-                ),
-                (
-                    int(image_width * (bbox[2] / 1000.0)),
-                    int(image_height * (bbox[3] / 1000.0)),
-                ),
-                color=color,
-                thickness=3,
-            )
-            # fmt: on
-            image_arr = cv2.cvtColor(image_arr_bgr, cv2.COLOR_BGR2RGB)
+        # image_arr = np.asarray(image)
+        # # convert rgb array to opencv's bgr format
+        # image_arr_bgr = cv2.cvtColor(image_arr, cv2.COLOR_RGB2BGR)
+        # for box in selected_boxes:
+        #     bbox = box["bbox"]
+        #     color = box["color"]
+        #     # fmt: off
+        #     cv2.rectangle(
+        #         image_arr_bgr,
+        #         (
+        #             int(image_width * (bbox[0] / 1000.0)),
+        #             int(image_height * (bbox[1] / 1000.0)),
+        #         ),
+        #         (
+        #             int(image_width * (bbox[2] / 1000.0)),
+        #             int(image_height * (bbox[3] / 1000.0)),
+        #         ),
+        #         color=color,
+        #         thickness=3,
+        #     )
+        #     # fmt: on
+        #     image_arr = cv2.cvtColor(image_arr_bgr, cv2.COLOR_BGR2RGB)
 
         # convert back to Image object
-        image = Image.fromarray(image_arr)
+        # image = Image.fromarray(image_arr)
         annotated_images.append(
             {
                 "id": batch["id"],
-                "image_annotated": image,
+                # "image_annotated": image,
+                "image": image,
+                "annotations": {
+                    "predictions": {
+                        "box_data": [
+                            {
+                                "position": {
+                                    # fmt: off
+                                    "minX": int(
+                                        image_width * (
+                                            box["bbox"][0] / 1000.0
+                                        )
+                                    ),
+                                    "maxX": int(
+                                        image_width * (
+                                            box["bbox"][2] / 1000.0
+                                        )
+                                    ),
+                                    "minY": int(
+                                        image_height * (
+                                            box["bbox"][1] / 1000.0
+                                        )
+                                    ),
+                                    "maxY": int(
+                                        image_height * (
+                                            box["bbox"][3] / 1000.0
+                                        )
+                                    ),
+                                    # fmt: on
+                                },
+                                "domain": "pixel",
+                                "class_id": box["pred"],
+                                "box_caption": label_encoder_inv[box["pred"]],
+                            }
+                            for box in selected_boxes
+                        ],
+                    }
+                },
             }
         )
 
@@ -183,7 +222,10 @@ def main(
         data=[
             [
                 sample["id"],
-                wandb.Image(sample["image_annotated"]),
+                wandb.Image(
+                    data_or_path=sample["image"],
+                    boxes=sample["annotations"],
+                ),
             ]
             for sample in annotated_images
         ],
