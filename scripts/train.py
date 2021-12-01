@@ -144,9 +144,6 @@ def main(
                 for i in range(len(y_pred))
                 if y_pred[i] != label_encoder["none"]
             ]
-            # enumerate(
-            #     [y for y in y_pred if y != label_encoder["none"]]
-            # )
         ]
         image_width = batch["image_width"]
         image_height = batch["image_height"]
@@ -158,35 +155,10 @@ def main(
             / f"{batch['id'][0]}.jpg"
         )
         # fmt: on
-        # image_arr = np.asarray(image)
-        # # convert rgb array to opencv's bgr format
-        # image_arr_bgr = cv2.cvtColor(image_arr, cv2.COLOR_RGB2BGR)
-        # for box in selected_boxes:
-        #     bbox = box["bbox"]
-        #     color = box["color"]
-        #     # fmt: off
-        #     cv2.rectangle(
-        #         image_arr_bgr,
-        #         (
-        #             int(image_width * (bbox[0] / 1000.0)),
-        #             int(image_height * (bbox[1] / 1000.0)),
-        #         ),
-        #         (
-        #             int(image_width * (bbox[2] / 1000.0)),
-        #             int(image_height * (bbox[3] / 1000.0)),
-        #         ),
-        #         color=color,
-        #         thickness=3,
-        #     )
-        #     # fmt: on
-        #     image_arr = cv2.cvtColor(image_arr_bgr, cv2.COLOR_BGR2RGB)
 
-        # convert back to Image object
-        # image = Image.fromarray(image_arr)
         annotated_images.append(
             {
                 "id": batch["id"],
-                # "image_annotated": image,
                 "image": image,
                 "annotations": {
                     "predictions": {

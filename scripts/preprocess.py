@@ -148,20 +148,6 @@ def main(run):
     )
     run.log_artifact(artifact_data)
 
-    # table = wandb.Table(
-    #     columns=["id", "image", "height", "width"],
-    #     data=[
-    #         [
-    #             sample["id"],
-    #             wandb.Image(str(task_1 / f"{sample['id']}.jpg")),
-    #             sample["image_height"],
-    #             sample["image_height"],
-    #         ]
-    #         for sample in data
-    #     ],
-    # )
-    # run.log({"LayoutLM on SROIE": table})
-
 
 if __name__ == "__main__":
     run = wandb.init(
