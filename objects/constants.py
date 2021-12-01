@@ -3,15 +3,15 @@ config = {
     "model_name": "microsoft/layoutlm-base-uncased",
     "data_raw_path": "SROIE",
     "data_path": "data",
-    "n_samples": 32,  # None for full dataset
+    "n_samples": None,  # None for full dataset
     "model_path": "model",
     "num_labels": 5,
     "pct_train": 0.8,
     "learning_rate": 0.001,
     "batch_size_train": 16,
     "batch_size_test": 1,
-    "epochs": 1,
-    "log_freq": 1,
+    "epochs": 100,
+    "log_freq": 2,
 }
 
 color_map = {
