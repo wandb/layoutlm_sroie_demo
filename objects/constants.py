@@ -3,7 +3,7 @@ config = {
     "model_name": "microsoft/layoutlm-base-uncased",
     "data_raw_path": "SROIE",
     "data_path": "data",
-    "n_samples": None,  # None for full dataset
+    "n_samples": 32,  # None for full dataset
     "model_path": "model",
     "num_labels": 5,
     "pct_train": 0.8,

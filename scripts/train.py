@@ -6,6 +6,7 @@ import wandb
 from tqdm import tqdm
 from PIL import Image
 import cloudpickle
+import objects
 from objects.dataset import SROIE
 from objects.transforms import GetTokenBoxesLabels
 from objects.model import (
@@ -29,11 +30,13 @@ def main(
     )
     transform_dir = Path.cwd() / "transforms"
     transform_dir.mkdir(exist_ok=True)
+    cloudpickle.register_pickle_by_value(objects)
     with (transform_dir / "transform.cloudpickle").open("wb") as f:
         cloudpickle.dump(
             obj=transform,
             file=f,
         )
+    cloudpickle.unregister_pickle_by_value(objects)
 
     transform_artifact = wandb.Artifact(
         name="GetTokenBoxesLabels",
