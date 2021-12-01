@@ -1,13 +1,9 @@
 from pathlib import Path
 import json
-
-# import numpy as np
 import torch
 from torch.utils.data import random_split, DataLoader
 import wandb
 from tqdm import tqdm
-
-# import cv2
 from PIL import Image
 import cloudpickle
 from objects.dataset import SROIE
@@ -17,7 +13,7 @@ from objects.model import (
     model,
 )
 from objects.trainer import Trainer
-from objects.constants import config, color_map, task_1_dir
+from objects.constants import config, task_1_dir
 
 
 def main(
@@ -137,7 +133,6 @@ def main(
             {
                 "bbox": bbox_list[index],
                 "pred": pred,
-                "color": color_map[label_encoder_inv[pred]],
             }
             for index, pred in [
                 (i, y_pred[i])
