@@ -98,6 +98,16 @@ def main(
         root=str(Path.cwd()),
     )
 
+    class_set = wandb.Classes(
+        [
+            {
+                "name": key,
+                "id": value,
+            }
+            for key, value in label_encoder.items()
+        ]
+    )
+
     annotated_images = []
     for batch in tqdm(dataloader_test, "final"):
         batch_input_ids = batch["input_ids"]
@@ -212,6 +222,7 @@ def main(
                             }
                             for box in selected_boxes
                         ],
+                        "class_labels": label_encoder_inv,
                     }
                 },
             }
@@ -225,6 +236,7 @@ def main(
                 wandb.Image(
                     data_or_path=sample["image"],
                     boxes=sample["annotations"],
+                    classes=class_set,
                 ),
             ]
             for sample in annotated_images
