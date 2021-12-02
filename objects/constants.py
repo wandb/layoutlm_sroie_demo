@@ -14,11 +14,4 @@ config = {
     "log_freq": 2,
 }
 
-color_map = {
-    "date": (33, 33, 224),  # red
-    "total": (0, 191, 0),  # green
-    "address": (206, 18, 18),  # blue
-    "company": (18, 103, 206),  # orange
-}
-
 task_1_dir = "0325updated.task1train(626p)"

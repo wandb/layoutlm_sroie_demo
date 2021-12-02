@@ -27,7 +27,7 @@ class GetTokenBoxesLabels:
         self,
         data: dict,
     ) -> dict:
-        """Retereives the bounding boxes and labels for tokens coming
+        """Retreives the bounding boxes and labels for tokens coming
         from OCR.
 
         Args:
